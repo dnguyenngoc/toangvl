@@ -14,6 +14,6 @@ git clone https://github.com/dnguyenngoc/toangvl.git
 <!-- CONTACT -->
 ## Contact
 
-Duy Nguyen - [@duy.nguyen.ngoc](https://instagram/duy.nguyen.ngoc) - duynguyenngoc@hotmail.com
+Duy Nguyen - [@duy.nguyen.ngoc](https://www.instagram.com/duy.nguyen.ngoc/) - duynguyenngoc@hotmail.com
 
 Project Link: [https://github.com/dnguyenngoc/toangvl](https://github.com/dnguyenngoc/toangvl.git)
