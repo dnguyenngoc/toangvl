@@ -1,0 +1,13 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Tic Tac Toe Server Using Node Js",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "author": "Duy Nguyen, duynguyenngoc@hotmail.com",
+  "dependencies": {
+    "socket.io": "^2.2.0"
+  }
+}
