@@ -1,10 +1,10 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "Tic Tac Toe Server Using Node Js",
-  "main": "server/server.js",
+  "description": "Toang Vl cac ban oi!!!",
+  "main": "src/App.js",
   "scripts": {
-    "start": "node server/server.js"
+    "start": "node src/App.js"
   },
   "author": "Duy Nguyen, duynguyenngoc@hotmail.com",
   "dependencies": {
