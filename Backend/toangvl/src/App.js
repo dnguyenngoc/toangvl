@@ -23,4 +23,5 @@ socket.on(
 );
 
 //  create api rooter load router file
-var router = express.Router();
+var router = require('api/router');
+app.use('/', router);
