@@ -9,4 +9,4 @@ dotenv.config({ path: '.env.local' })
 exports.NODE_ENV = "DEV"
 
 // Port
-exports.PORT = 4201
+exports.PORT = 80

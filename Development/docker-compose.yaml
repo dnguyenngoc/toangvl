@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+
   # Backend / API
   backend:
     image: api
@@ -8,3 +9,38 @@ services:
     volumes:
       - ../backend/toangvl/public:/user/src/app/public
     restart: always
+    ports:
+      - '4201:80'
+    networks:
+      - toangvlnet
+  
+  # Database mysql
+  database:
+    image: mysql:5.7
+    container_name: database
+    volumes:
+      - ./db_data:/var/lib/mysql
+    restart: always
+    ports:
+      - '32000:3306'
+    env_file:
+      - ./environment/dev.env
+    networks:
+      - toangvlnet
+  
+  # PHP Myadmin
+  phpmyadmin:
+    depends_on:
+      - database
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8080:80'
+    env_file:
+      - ./environment/dev.env
+    networks:
+      - toangvlnet
+
+networks:
+  toangvlnet:
+
