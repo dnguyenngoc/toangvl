@@ -4,11 +4,15 @@
   "description": "Toang Vl cac ban oi!!!",
   "main": "src/App.js",
   "scripts": {
-    "start": "node src/App.js"
+    "start": "node src/App.js",
+    "build": "npm build --prod"
   },
   "author": "Duy Nguyen, duynguyenngoc@hotmail.com",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "ip": "^1.1.5",
+    "moment": "^2.27.0",
     "socket.io": "^2.2.0"
   }
 }

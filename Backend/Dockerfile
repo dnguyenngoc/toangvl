@@ -4,14 +4,12 @@ RUN mkdir -p /user/src/app
 
 WORKDIR /user/src/app
 
-COPY ./package*.json ./
+COPY ./toangvl/ /user/src/app
 
 RUN npm install --quiet
 
-COPY . ./
-
-RUN npm run build:prod
+RUN npm run-script build
 
 EXPOSE 4201
 
-ENTRYPOINT ["node", "build/App.js"]
+ENTRYPOINT ["node", "src/App.js"]

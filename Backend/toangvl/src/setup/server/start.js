@@ -1,23 +1,23 @@
 
 // Imports
-import ip from 'ip'
-import moment from 'moment'
+const ip = require('ip')
+const moment = require('moment')
 
 // App Imports
-import { PORT, NODE_ENV } from '../config/env'
+const  env = require('../config/env.js')
 
 // Start server
-export default function (server) {
+module.exports = function(server) {
     console.info('SETUP - Starting server..')
   
     // Start Server
-    const serverProcess = server.listen(PORT, (error) => {
+    const serverProcess = server.listen(env.PORT, (error) => {
       if (error) {
         console.error('ERROR - Unable to start server.')
       } else {
         console.info(`INFO - Server started on`)
-        console.info(`  Local   http://localhost:${ PORT } [${ NODE_ENV }]`)
-        console.info(`  Network http://${ ip.address() }:${ PORT } [${ NODE_ENV }]`)
+        console.info(`  Local   http://localhost:${ env.PORT } [${ env.NODE_ENV }]`)
+        console.info(`  Network http://${ ip.address() }:${ env.PORT } [${ env.NODE_ENV }]`)
         console.info(`  Datetime ${ moment().format('YYYY-MM-DD hh:mm:ss a') }\n`)
       }
     })
