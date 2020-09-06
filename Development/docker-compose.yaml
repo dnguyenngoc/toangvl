@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  # Backend / API
+  backend:
+    image: api
+    build: ../Backend
+    volumes:
+      - ../backend/toangvl/public:/user/src/app/public
+    restart: always
