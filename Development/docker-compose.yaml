@@ -9,8 +9,12 @@ services:
     volumes:
       - ../backend/toangvl/public:/user/src/app/public
     restart: always
+    env_file:
+      - ./environment/dev.env
     ports:
       - '4201:80'
+    depends_on:
+      - database
     networks:
       - toangvlnet
   
