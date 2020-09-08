@@ -1,7 +1,10 @@
-var express = require('express');
-var router = express.Router();
+module.exports = function(router) {
 
-var accounts_controller = require('resources/accounts');
-
-// Accounts api router
-router.use('/accounts', accounts_controller);
+    router.get('/test', function(req, res) {
+            return res.send("hello this is aest")
+    });
+    
+    router.get('/test1', function(req, res) {
+            return res.send("hello this is aest")
+    })
+}

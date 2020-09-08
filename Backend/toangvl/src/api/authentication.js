@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken')
 const env = require('../config/env.js')
 const decrypt = require('../helper/decrypt.js')
 
-
 const Account = require('')
 
 // Authentication middleware

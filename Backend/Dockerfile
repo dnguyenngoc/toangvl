@@ -1,5 +1,7 @@
 FROM node:latest
 
+LABEL maintainer="Duy Nguyen <duyngunyenngoc@hotmail.com>"
+
 RUN mkdir -p /user/src/app
 
 WORKDIR /user/src/app

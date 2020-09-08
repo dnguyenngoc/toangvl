@@ -5,17 +5,16 @@ const dotenv = require('dotenv')
 dotenv.config({ path: '.env.local' })
 
 // Environment
-// export const NODE_ENV = process.env.NODE_ENV
 exports.NODE_ENV = process.env.NODE_ENV
 
 // Port
-exports.PORT = process.env.BACKEND_PORT
+exports.BACKEND_PORT = process.env.BACKEND_PORT
 
 // Mysql
-exports.DATABASE_URL = process.env.DATABASE_URL
-exports.DATABASE_USER = process.env.MYSQL_USER
-exports.DATABASE_PASSWORD = process.env.MYSQL_PASSWORD
-exports.DATABASE_NAME = process.env.MYSQL_DATABASE
+// exports.MYSQL_URL = process.env.MYSQL_URL
+
+// MongoDB
+exports.MONGO_URL = process.env.MONGO_URL
 
 // Authenlication
-exports.SECURITY_SECRET = process.env.MYSQL_PASSWORD
+exports.SECURITY_SECRET = process.env.SECURITY_SECRET
