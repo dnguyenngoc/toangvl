@@ -1,10 +1,7 @@
-module.exports = function(router) {
+const accounts = require('./resources/accounts.js')
 
-    router.get('/test', function(req, res) {
-            return res.send("hello this is aest")
-    });
-    
-    router.get('/test1', function(req, res) {
-            return res.send("hello this is aest")
-    })
+module.exports = async function(router) {
+        
+    // Accounts router
+    router.use('/accounts', accounts);  
 }

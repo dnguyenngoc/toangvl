@@ -6,6 +6,11 @@ const express = require('express')
 module.exports = function(server) {
     console.info('SETUP - Start Endpoint..')
     router = express.Router()
-    routers(server)
-    console.info('SETUP - Endpoint are working!')
+    routers(server, (error) => {
+        if (error) {
+            console.error('ERROR - Unable to start Endpoint.')
+        }else{
+            console.info('SETUP - Endpoint are working!')
+        }
+    })
 }
