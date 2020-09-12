@@ -13,23 +13,46 @@ export default class Chess extends React.Component {
     this.state = {
       squares: InitialBoard(),
       player: 1,
-      turn: 'white'
     }
   }
 
-  handleClick(i){
+  onMouseEnter(i){
     const squares = this.state.squares.slice();
-    if (squares[i] != null){
-      squares[i].style = {...squares[i].style, backgroundColor: "RGB(111,143,114)"};
-      console.log("have click", i);
-      this.setState({
-        squares: squares, 
-        player: 1,
-        turn: 'white'
-      });
+    // neu squares == null co nghia la con tro chuot khong nam tren vi tri co quan co
+    if (squares[i]!= null) {
+      const suggest = squares[i].isMovePossible(i);
+      console.log(suggest)
+      for (let j of suggest) {
+        console.log(j)
+        if (j != i){
+          squares[j].style = {...squares[j].style, backgroundColor: "RGB(111,143,114)"};
+        }
+        // else if (squares[j].isMovePossible(j) == null) {
+        //   squares[j].style = {backgroundColor: "RGB(111,143,114)"};
+        // }
+      }
+      this.setState({squares: squares, location: i});
     }
-    
   }
+  onMouseLeave(i) {
+    // const squares = this.state.squares.slice();
+    // if (squares[i].isMovePossible() != null) {
+    //   const suggest = squares[i].isMovePossible(i);
+    //   for (let j of suggest) {
+    //     if (j == i){
+    //       squares[j].style = {...squares[j].style}
+    //       delete squares[j].style["backgroundColor"]
+    //     }else{
+    //       // squares[j] = new Empty();
+    //       // squares[j].style = null;
+    //     }
+    //   }
+    //   this.setState({squares: squares, location: i});
+     
+    // }
+  }
+
+
 
   render() {
         return (
@@ -38,7 +61,8 @@ export default class Chess extends React.Component {
               <div className="game-board">
                 <Board
                   squares = {this.state.squares}
-                  onClick = {(i) => this.handleClick(i)}
+                  onMouseEnter={(i) => this.onMouseEnter(i)}
+                  onMouseLeave={(i) => this.onMouseLeave(i)}
                 />
               </div>
             </div>
