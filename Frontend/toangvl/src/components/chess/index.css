@@ -19,8 +19,14 @@
 
 .dark-square{
 background-color: RGB(187,190,100);
+
 }
 
 .light-square{
     background-color: RGB(234,240,206);
+}
+
+.game {
+  display: flex;
+  flex-direction: row;
 }

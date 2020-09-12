@@ -1,13 +1,13 @@
 // Imports
-import { React, Component } from 'react';
-import socketIOClient from "socket.io-client";
+import React from 'react';
 
 // Imports App
+import Chess from './components/chess/chess.js'
 
-class App extends Component {
+class App extends React.Component {
   render() {
     return (
-      {<div>hello</div>};
+      <Chess/>
     );
   }
 }
