@@ -5,9 +5,6 @@ import Pawn from '../chessman/pawn.js';
 import Queen from '../chessman/queen.js';
 import Rook from '../chessman/rook.js';
 
-
-
-
 /**
 * Tao ra mot mang 8x8 de dat quan co len thui
 */
