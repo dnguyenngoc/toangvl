@@ -10,6 +10,19 @@ export default class Pawn extends Piece {
     }
   }
   isMovePossible(src){
-    return [src, src+1, src-1];
+    if (this.player !== 1) {
+      if (this.initialPositions[2].indexOf(src) >= 0)
+        return [src, src+8, src+16] 
+      else{
+        return [src, src+8]
+      }
+    }else{
+      if (this.initialPositions[1].indexOf(src) >= 0)
+        return [src, src-8, src-16] 
+      else{
+        return [src, src-8]
+      }
+    }
+
   }
 }

@@ -24,8 +24,20 @@
 .light-square{
   background-color: RGB(234,240,206);
 }
+.hover-square{
+  background-color: RGB(255,143,114);
+}
 
 .game {
   display: flex;
   flex-direction: row;
+}
+
+.chat-box{
+  padding-right: 150px;
+
+}
+.rank-info{
+  padding-left: 150px;
+
 }
