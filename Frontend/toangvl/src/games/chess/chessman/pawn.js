@@ -23,6 +23,15 @@ export default class Pawn extends Piece {
         return [src, src-8]
       }
     }
+  }
+
+  isAttackPossible(src) {
+    if (this.player !== 1) {
+      return [src+7, src+9]
+    }else{
+      return [src-7, src-9]
+    }
 
   }
+
 }

@@ -12,8 +12,6 @@ export default class Board extends React.Component {
       piece = {this.props.squares[i]} 
       style = {this.props.squares[i]? this.props.squares[i].style : null}
       shade = {squareShade}
-      // onMouseEnter={() => this.props.onMouseEnter(i)}
-      // onMouseLeave={() => this.props.onMouseLeave(i)}
       onClick={() => this.props.onClick(i)}
     />
   }
