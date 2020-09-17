@@ -28,7 +28,6 @@ export default class Chess extends React.Component {
 
 
   logicGame(i) {
-    console.log(this.state);
     const black = this.state.now.black.slice();
     const white = this.state.now.white.slice();
     const squares = this.state.squares.slice();
@@ -42,18 +41,16 @@ export default class Chess extends React.Component {
     // Click 1: Select chessman make change click 0 > 1 change location to i change suggest [] -> 
     // [1,2,3] change attack [] -> [1,2,3]
     if (click === "step1") {
-
       // Click 1: Check click white or black and update state include location, click, suggest || ignore if click empty
       if ((turn === 'white' && utils.isitemInList(i, white)) || (turn === 'black' && utils.isitemInList(i, black)) ) {
-        console.log("[Turn %s][Click: 1] Select chessman ok", turn);
-        const attack = squares[i].isAttackPossible(i);
-        const suggest = squares[i].isMovePossible(i);
-        suggest.forEach(s => {
-          if (squares[s].player !== undefined && squares[s].player !== this.getTurnByPlayer(turn)  && s !== i) suggest.pop(s)
-         });
-        attack.forEach(element => {
-         if (squares[element].chessName !== "empty") suggest.push(element)
+        const attack = squares[i].isAttackPossible(i)
+          .filter(a => squares[a].chessName !== 'empty' && squares[a].player !== utils.getTurnByPlayer(turn));
+        const suggest = squares[i].isMovePossible(i).filter(s => squares[s].chessName == 'empty' || s == i);
+        attack.forEach(a => {
+         if (a.player !== utils.getTurnByPlayer(turn)) suggest.push(a);
         });
+        console.log("[ATTACK]: ", attack);
+        console.log("[SUGGEST]: ", suggest);
         this.setState({click: "step2", location: i, suggest: {status: 1, dict: suggest}, attack: attack});
       }else console.log("[Turn %s][Click: 1] Empty chessman %s", turn);
     } 
@@ -62,49 +59,40 @@ export default class Chess extends React.Component {
     else{
       // Click 2: In list move. so make move and update state (change: )
       if (utils.isitemInList(i, attack) && squares[i].chessName !== "empty"){
-        console.log("[Turn %s][Click: 2] Attack...", turn);
-        this.moveChessManAndUpdateSquares(squares, locationNow, i);
-        this.changTurnAndUpdateTurnAndNow(turn, white, black, locationNow, i, "attack");
-        this.setState({click: "step1", location: -1, attack: [], suggest: {status: 0, dict: []}, });
+          this.moveChessManAndUpdateSquares(squares, locationNow, i);
+          this.changTurnAndUpdateTurnAndNow(turn, white, black, locationNow, i, "attack");
+          this.setState({click: "step1", location: -1, attack: [], suggest: {status: 0, dict: []}, });
       }
-
-      // Click 2: If location move in suggest update click, location and suggest to default
+  
+        // Click 2: If location move in suggest update click, location and suggest to default
       else if (utils.isitemInList(i, suggest)) {
-        console.log("[Turn %s][Click: 2] Location matching with suggest", turn)
-
         // Click 2: Igrore click 1 because click on same click 1 and update state to default
         if (i === locationNow) {
-          console.log("[Turn %s][Click: 2] On Select chessman -> Ignore select chessman", turn)
-          this.setState({click: "step1", location: -1, attack: [], suggest: {status: 0, dict: []}});
+            this.setState({click: "step1", location: -1, attack: [], suggest: {status: 0, dict: []}});
         }
         else {
-          console.log("[Turn %s][Click: 2] Move quan co", turn);
-          this.moveChessManAndUpdateSquares(squares, locationNow, i);
-          this.changTurnAndUpdateTurnAndNow(turn, white, black, locationNow, i, "move");
-          this.setState({click: "step1", location: -1, suggest: {status: 0, dict: []}});
+            this.moveChessManAndUpdateSquares(squares, locationNow, i);
+            this.changTurnAndUpdateTurnAndNow(turn, white, black, locationNow, i, "move");
+            this.setState({click: "step1", location: -1, suggest: {status: 0, dict: []}});
         }
       }
-
-      // Click 2: Click on location unacceptable
-      else console.log("[Click: 2] Ngoai vung cho phep")
     }
+
   }
 
   // handleMoveChessMan
   moveChessManAndUpdateSquares(squares, start, end) {
-    console.log("[Move Chessman] move from %s to %s starting....", start, end);
     squares[end] = squares[start];
     squares[start] = new Empty(0);
-    console.log("[Move Chessman] ....done!");
     this.setState({squares: squares});
   }
 
   //Change turn and update location
   changTurnAndUpdateTurnAndNow(turn, white, black, start, end, type){
     if (turn === "white" && type === "move"){
-        turn = 'black'; white.pop(start); white.push(end);
+        turn = 'black'; white = white.filter(w=>w!==start); white.push(end);
     }else if (turn === "black" && type === "move") {
-        turn = 'white'; black.pop(start); black.push(end);
+        turn = 'white'; black.splice(start, 1); black.push(end);
     }else if (turn === "white" && type === "attack") {
         turn = 'black'; white.pop(start); black.pop(end); white.push(end);
     }else {
@@ -113,10 +101,7 @@ export default class Chess extends React.Component {
     this.setState({turn: turn, now: {white: white, black: black}})
   }
 
-  getTurnByPlayer(turn){
-    if (turn === "white") return 1
-    else if (turn === "black") return 2
-  }
+ 
 
   render() {
     return (

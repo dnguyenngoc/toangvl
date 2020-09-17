@@ -9,6 +9,13 @@ export default class King extends Piece {
     }
 
     isMovePossible(src){
-        return [src];
+        const list = [src, src - 9, src - 8, src - 7, src + 1, src - 1, src + 9, src + 8, src + 7,]
+        const newlist = list.filter( e => e > -1 && e < 64);
+        return newlist
+    }
+    isAttackPossible(src){
+        const list = [src - 9, src - 8, src - 7, src + 1, src - 1, src + 9, src + 8, src + 7,]
+        const newlist = list.filter( e => e > -1 && e < 64);
+        return newlist
     }
 }   
