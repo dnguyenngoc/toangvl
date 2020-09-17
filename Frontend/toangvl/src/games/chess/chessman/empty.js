@@ -1,10 +1,9 @@
 // Import App
-import Piece from '../helper/pieces.js'
+import Piece from './pieces.js'
 
 export default class Empty extends Piece {
   constructor(player){
-    super(player, (player === 1?  "" : ""));
-    this.empty = 1;
-    this.player = 0;
+    super(player, (player === undefined?  "" : ""));
+    this.chessName = "empty"
   }
 }

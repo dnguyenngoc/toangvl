@@ -11,7 +11,7 @@ import Empty from '../chessman/empty.js'
 */
 export default function initialBoard(){
 
-    const squares = Array(64).fill(new Empty(0));
+    const squares = Array(64).fill(new Empty());
     for(let i = 8; i < 16; i++){
       squares[i] = new Pawn(2);
       squares[i + 40] = new Pawn(1);
