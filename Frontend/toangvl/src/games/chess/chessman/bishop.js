@@ -8,6 +8,13 @@ export default class Bishop extends Piece {
     this.chessName = "bishop"
   }
   isMovePossible(src){
-    return [src];
+    const list = [src, src - 17, src - 10, src + 6, src + 15, src - 15, src - 6, src + 10, src + 17]
+    list.filter(s => s>-1 && s<64)
+    return list
+  }
+  isAttackPossible(src){
+    const list = [src, src - 17, src - 10, src + 6, src + 15, src - 15, src - 6, src + 10, src + 17]
+    list.filter(s => s>-1 && s<64)
+    return list
   }
 }

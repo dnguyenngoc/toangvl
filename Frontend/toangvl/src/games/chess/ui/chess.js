@@ -3,6 +3,8 @@ import React from 'react';
 
 // Imports App
 import Board from './board/board.js'; // handke board khi người chơi thực hiện thao tao (update board)
+import Victory from './victory/victory.js'; // handke board khi người chơi thực hiện thao tao (update board)
+
 import './index.css'; // css
 import InitialBoard  from '../helper/initialBoard.js'; //board khởi tạo ban đầu
 import Empty from '../chessman/empty.js'; // define một vị trí lá empty(có nghĩa là k có quân cờ nào)
@@ -14,7 +16,7 @@ export default class Chess extends React.Component {
     super();
     this.state = {
       squares: InitialBoard(), // array thể hiện quân cơ hiện có trên bàn
-      now: {black:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], 
+      now: {black:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], 
         white: [63,62,61,60,59,58,57,56,55,54,53,52,51,50,49,48]}, // danh sách quân cờ hiện tại còn lại ban đầu
       remove: {white:[], black: []}, // danh sách quân cờ đã bị đối phương kill @@~
       suggest: {status: 0, dict: []}, // danh sách các vị trí đề nghị cho việc di chuyển status 1=> white -1 => black
@@ -23,9 +25,10 @@ export default class Chess extends React.Component {
       turn: "white", // turn hiên tại được phép thực hiện hành động
       location: -1, // vị trí hiện tại
       victory: {site: -1, mess: "not start yet"} // trạng thái chiến thắng
+      // victory: {site: 1, mess: "White Win!"} // trạng thái chiến thắng
+
     }
   }
-
 
   logicGame(i) {
     const black = this.state.now.black.slice();
@@ -37,21 +40,19 @@ export default class Chess extends React.Component {
     var locationNow = this.state.location;
     var click = this.state.click;
     var victory = this.state.victory;
+    console.log("CLICK: ", i)
 
     // Click 1: Select chessman make change click 0 > 1 change location to i change suggest [] -> 
     // [1,2,3] change attack [] -> [1,2,3]
     if (click === "step1") {
+      console.log("[BLACK]: ", black);
+      console.log("[WHITE]: ", white);
       // Click 1: Check click white or black and update state include location, click, suggest || ignore if click empty
       if ((turn === 'white' && utils.isitemInList(i, white)) || (turn === 'black' && utils.isitemInList(i, black)) ) {
-        const attack = squares[i].isAttackPossible(i)
-          .filter(a => squares[a].chessName !== 'empty' && squares[a].player !== utils.getTurnByPlayer(turn));
-        const suggest = squares[i].isMovePossible(i).filter(s => squares[s].chessName == 'empty' || s == i);
-        attack.forEach(a => {
-         if (a.player !== utils.getTurnByPlayer(turn)) suggest.push(a);
-        });
-        console.log("[ATTACK]: ", attack);
-        console.log("[SUGGEST]: ", suggest);
-        this.setState({click: "step2", location: i, suggest: {status: 1, dict: suggest}, attack: attack});
+        const attackSuggest =  squares[i].getSuggestAndAttack(this.state, i)
+        console.log("[ATTACK]: ", attackSuggest.attack);
+        console.log("[SUGGEST]: ", attackSuggest.suggest);
+        this.setState({click: "step2", location: i, suggest: {status: 1, dict: attackSuggest.suggest}, attack: attackSuggest.attack});
       }else console.log("[Turn %s][Click: 1] Empty chessman %s", turn);
     } 
     
@@ -83,7 +84,7 @@ export default class Chess extends React.Component {
   // handleMoveChessMan
   moveChessManAndUpdateSquares(squares, start, end) {
     squares[end] = squares[start];
-    squares[start] = new Empty(0);
+    squares[start] = new Empty();
     this.setState({squares: squares});
   }
 
@@ -94,14 +95,34 @@ export default class Chess extends React.Component {
     }else if (turn === "black" && type === "move") {
         turn = 'white'; black.splice(start, 1); black.push(end);
     }else if (turn === "white" && type === "attack") {
-        turn = 'black'; white.pop(start); black.pop(end); white.push(end);
+      if (this.state.squares[end].chessName == "king"){
+        this.setState({victory: {site: 1, mess: "White victory!"}})
+      }
+      turn = 'black'; white.pop(start); black.pop(end); white.push(end);
     }else {
-        turn = 'white'; black.pop(start,); white.pop(end); black.push(end);  
+      if (this.state.squares[end].chessName == "king"){
+        this.setState({victory: {site: 2, mess: "Black victory!"}})
+      }
+      turn = 'white'; black.pop(start,); white.pop(end); black.push(end);  
     } 
     this.setState({turn: turn, now: {white: white, black: black}})
   }
 
- 
+
+  restartGame(){
+    // this.setState = ({
+    //   squares: InitialBoard(), // array thể hiện quân cơ hiện có trên bàn
+    //   now: {black:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], 
+    //     white: [63,62,61,60,59,58,57,56,55,54,53,52,51,50,49,48]}, // danh sách quân cờ hiện tại còn lại ban đầu
+    //   remove: {white:[], black: []}, // danh sách quân cờ đã bị đối phương kill @@~
+    //   suggest: {status: 0, dict: []}, // danh sách các vị trí đề nghị cho việc di chuyển status 1=> white -1 => black
+    //   attack: [], // list danh sách có thể attack hiện tại của quân cờ được select
+    //   click: "step1", // thể hiện trạng thái click hiện tại chưa defaut là step1
+    //   turn: "white", // turn hiên tại được phép thực hiện hành động
+    //   location: -1, // vị trí hiện tại
+    //   victory: {site: -1, mess: "not start yet"} // trạng thái chiến thắng
+    // })
+  }
 
   render() {
     return (
@@ -114,11 +135,14 @@ export default class Chess extends React.Component {
             <Board
               squares = {this.state.squares}
               suggest = {this.state.suggest}
-              onClick= {(i) =>  this.logicGame(i)}
+              onClick = {(i) =>  this.logicGame(i)}
             />
           </div>
-          <div className="game-board">
-          
+          <div className="popup-victory">
+            <Victory
+            victory = {this.state.victory}
+            restartGame = {this.restartGame()}
+            />
           </div>
           
         </div>
