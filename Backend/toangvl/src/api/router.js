@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
+const accounts = require('./resources/accounts.js')
 
-var accounts_controller = require('resources/accounts');
-
-// Accounts api router
-router.use('/accounts', accounts_controller);
+module.exports = async function(router) {
+        
+    // Accounts router
+    router.use('/accounts', accounts);  
+}

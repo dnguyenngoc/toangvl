@@ -1,6 +1,25 @@
-var express = require('express');
-var router = express.Router();
+// Imports
+const express = require('express')
 
-var account_controller = require('../controllers/accounts');
+// App Imports
+const controller = require('../controllers/accounts.js')
 
-router.post('/login_access_token', account_controller.login_access_token);
+router = express.Router();
+
+// Login access token
+router.get('/login',controller.login)
+
+// // Login renew token
+// router.get('/renew-token',controller.renewToken)
+
+// // Logout
+// router.post('/logout',controller.logout)
+
+// // Edit accounts
+// router.put('/change',controller.editAccount)
+
+// // Delete accounts
+// router.post('/remove',controller.remove)
+
+
+module.exports = router;

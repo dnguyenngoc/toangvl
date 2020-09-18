@@ -1,0 +1,59 @@
+.square {
+    background: transparent;
+    border: 1px solid transparent;
+    float: left;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 34px;
+    height: 48px;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    text-align: center;
+    width: 48px;
+  }
+  
+  .square:focus {
+    outline: none;
+  }
+
+.dark-square{
+  background-color: RGB(187,190,100);
+}
+
+.light-square{
+  background-color: RGB(234,240,206);
+} 
+.hover-square{
+  background-color: rgb(139, 161, 152);
+}
+
+.game {
+  display: flex;
+  flex-direction: row;
+}
+
+.chat-box{
+  padding-right: 150px;
+
+}
+.rank-info{
+  padding-left: 150px;
+
+}
+
+
+
+/* Victory */
+/* The actual popup */
+.popup {
+  border-radius: 7px;
+  background:#86ac9d;
+  position:absolute;
+  width:120px;
+  height: 50px;
+  top: 30%;
+  left: 70%;
+  margin-left: -700px;
+  margin-top: -40px;
+}
