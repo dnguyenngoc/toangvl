@@ -24,8 +24,8 @@ export default class Chess extends React.Component {
       click: "step1", // thể hiện trạng thái click hiện tại chưa defaut là step1
       turn: "white", // turn hiên tại được phép thực hiện hành động
       location: -1, // vị trí hiện tại
-      victory: {site: -1, mess: "not start yet"} // trạng thái chiến thắng
-      // victory: {site: 1, mess: "White Win!"} // trạng thái chiến thắng
+      // victory: {site: -1, mess: "not start yet"} // trạng thái chiến thắng
+      victory: {site: 1, mess: "White Win!"} // trạng thái chiến thắng
 
     }
   }
@@ -126,25 +126,20 @@ export default class Chess extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="main">
+        <div className="rank">
+            "main"
+        </div>
         <div className="game">
-          <div className="chat-box">
-            {this.state.turn}
-          </div>
+          <Victory victory = {this.state.victory} restartGame = {this.restartGame()}/>
+    
           <div className="game-board">
             <Board
               squares = {this.state.squares}
               suggest = {this.state.suggest}
               onClick = {(i) =>  this.logicGame(i)}
             />
-          </div>
-          <div className="popup-victory">
-            <Victory
-            victory = {this.state.victory}
-            restartGame = {this.restartGame()}
-            />
-          </div>
-          
+          </div> 
         </div>
       </div>
      

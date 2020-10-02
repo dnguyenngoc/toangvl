@@ -57,3 +57,13 @@
   margin-left: -700px;
   margin-top: -40px;
 }
+
+/* Main */
+.main{
+  text-align: center;
+  display: flex;
+}
+
+.rank {
+  width: 30%;
+}
