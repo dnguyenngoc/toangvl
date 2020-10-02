@@ -1,4 +1,4 @@
-name: Build-BE
+name: Production backend building job
 on:
   push:
     branches:
@@ -10,5 +10,4 @@ jobs:
   container-job:
     runs-on: ubuntu-latest
     steps:
-    - run: echo haha
-    - run: echo haha
+    - run: echo BUID BACKEND DOCKER IMAGE TO ECR AWS....
