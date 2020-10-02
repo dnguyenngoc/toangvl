@@ -1,13 +1,15 @@
-name: Production backend building job
+name: Staging backend building job
 on:
   push:
     branches:
-    - master
+    - staging
   pull_request:
     branches:
-    - master
+    - staging
 jobs:
   container-job:
     runs-on: ubuntu-latest
     steps:
     - run: echo BUID BACKEND DOCKER IMAGE TO ECR AWS....
+  
+  
