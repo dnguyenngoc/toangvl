@@ -7,12 +7,34 @@ on:
     branches:
     - master
 jobs:
+
   build:
+    name: Building backend and pushing image to AWS ECR
     runs-on: ubuntu-latest
     steps:
-    - run: echo BUID BACKEND DOCKER IMAGE TO ECR AWS....
+      
+    - name: Setup ECR
+      run: |
+        $( aws ecr get-login --no-include-email )
+    
+    - name: Build and tag the image
+      run: |
+        docker build \
+          -t $CONTAINER_IMAGE \
+          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE ./Backend
+
+    - name: Push
+      run: |
+        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE
+
+    env:
+      CONTAINER_IMAGE: duynguyenngoc
+      AWS_ACCOUNT_ID: '267139441507'
+      AWS_DEFAULT_REGION: ap-southeast-1
+
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
-    - run: echo BUID BACKEND DOCKER IMAGE TO ECR AWS....
+    - run: echo DEPLOY BACKEND DOCKER IMAGE TO ECR AWS....
     
