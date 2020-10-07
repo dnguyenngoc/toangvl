@@ -22,6 +22,7 @@ env:
   PRODUCTION_PRIVATE_KEY: ${{ secrets.PRODUCTION_PRIVATE_KEY }}
   PRODUCTION_HOST_SSH_USERNAME: ${{ secrets.PRODUCTION_HOST_SSH_USERNAME }} 
   PRODUCTION_HOST_IP_ADDRESS: ${{ secrets.PRODUCTION_HOST_IP_ADDRESS }}
+  PRODUCTION_SSH_KEY_PATH: ${{ github.workspace }}/../production.key
 
 jobs:
 
@@ -64,17 +65,14 @@ jobs:
     - name: Add SSH key to vm deploy
       run: |
         mkdir -p ~/.ssh/
-        echo $PRODUCTION_PRIVATE_KEY | tr -d '\r' > /home/runner/.ssh/id_rsa
-        sudo chmod 700 /home/runner/.ssh/id_rsa
-        eval "$(ssh-agent -s)"
-        ssh-add /home/runner/.ssh/id_rsa
-        ssh-keyscan -H 'github.com' >> ~/.ssh/known_hosts      
+        echo $PRODUCTION_PRIVATE_KEY | tr -d '\r' > ../production.key
+        sudo chmod 700 ../production.key   
       shell: bash
 
     # [Step-3] ssh to server and pull image and dowload file needed
     - name: Connect to Server with SSH and pull DockerHub image
       run: |
-        scp -o StrictHostKeyChecking=no -r ./Frontend/package.json $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS:./
+        scp -i $PRODUCTION_SSH_KEY_PATH -r ./Frontend/package.json $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS:./
         echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
         docker pull $PROJECT_NAME:$FRONTEND_IMAGE
         docker pull $PROJECT_NAME:$BACKEND_IMAGE
