@@ -61,7 +61,7 @@ jobs:
     - name: Add SSH key to vm deploy
       run: |
         mkdir -p ~/.ssh/
-        echo $PRODUCTION_PRIVATE_KEY | | tr -d '\r' > ~/.ssh/id_rsa
+        echo $PRODUCTION_PRIVATE_KEY | tr -d '\r' > ~/.ssh/id_rsa
         sudo chmod 700 ~/.ssh/id_rsa
         eval "$(ssh-agent -s)"
         ssh-add ~/.ssh/id_rsa
