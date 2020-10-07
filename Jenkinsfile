@@ -15,7 +15,7 @@ pipeline {
       steps{
         dir ('/toangvl/Backend') {
           script {
-            docker.build registry + ":" + backend
+            dockerImage = docker.build registry + ":" + backend
           }
         }
       }
