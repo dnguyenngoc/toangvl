@@ -76,7 +76,7 @@ jobs:
         scp -o StrictHostKeyChecking=no -r ./Development/docker-production.yaml \
         $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS:./
         ssh -o StrictHostKeyChecking=no $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS << 'ENDSSH'
-        docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+        docker login -u duynguyenngoc -p 12214@Nguyen
         docker pull $DOCKERHUB_USERNAME/$PROJECT_NAME:$BACKEND_IMAGE
         docker pull $DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE
         ls
