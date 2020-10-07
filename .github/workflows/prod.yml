@@ -23,12 +23,12 @@ jobs:
           -t $CONTAINER_IMAGE \
           -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE ./Backend
 
-    - name: Push
+    - name: Push image to ECR
       run: |
         docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE
 
     env:
-      CONTAINER_IMAGE: duynguyenngoc
+      CONTAINER_IMAGE: toangvl
       AWS_ACCOUNT_ID: '267139441507'
       AWS_DEFAULT_REGION: ap-southeast-1
 
