@@ -22,7 +22,6 @@ env:
   PRODUCTION_PRIVATE_KEY: ${{ secrets.PRODUCTION_PRIVATE_KEY }}
   PRODUCTION_HOST_SSH_USERNAME: ${{ secrets.PRODUCTION_HOST_SSH_USERNAME }} 
   PRODUCTION_HOST_IP_ADDRESS: ${{ secrets.PRODUCTION_HOST_IP_ADDRESS }}
-  PRODUCTION_SSH_KEY_PATH: ${{ github.workspace }}/../production.key
 
 jobs:
 
@@ -65,14 +64,13 @@ jobs:
     - name: Add SSH key to vm deploy
       run: |
         mkdir -p ~/.ssh/
-        echo $PRODUCTION_PRIVATE_KEY | tr -d '\r' > ../production.key
-        sudo chmod 700 ../production.key   
-      shell: bash
+        ssh-add - <<< $PRODUCTION_PRIVATE_KEY
+        ssh-keyscan -H 'github.com' >> ~/.ssh/known_hosts  
 
     # [Step-3] ssh to server and pull image and dowload file needed
     - name: Connect to Server with SSH and pull DockerHub image
       run: |
-        ssh -T -i $PRODUCTION_SSH_KEY_PATH $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS
+        ssh ubuntu@ec2-52-221-247-51.ap-southeast-1.compute.amazonaws.com
         ls
 
      # [Step-4] make deploy 
