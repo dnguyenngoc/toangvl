@@ -25,42 +25,42 @@ env:
 
 jobs:
 
-  # # [BUILDING] Building backend and frontend and pushing image to AWS ECR
-  # build:
-  #   name: Building backend and pushing image to AWS ECR
-  #   runs-on: ubuntu-latest
-  #   steps:
+  # [BUILDING] Building backend and frontend and pushing image to AWS ECR
+  build:
+    name: Building backend and pushing image to AWS ECR
+    runs-on: ubuntu-latest
+    steps:
 
-  #   # [Step-1] check config git
-  #   - uses: actions/checkout@v2
+    # [Step-1] check config git
+    - uses: actions/checkout@v2
 
-  #   # [Step-2] login dockerhub container
-  #   - name: Login to DockerHub Registry
-  #     run: |
-  #       echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+    # [Step-2] login dockerhub container
+    - name: Login to DockerHub Registry
+      run: |
+        echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
     
-  #   # [Step-3] buid and tag image from Dockerfile
-  #   - name: Build and tag the image
-  #     run: |
-  #       docker build -t $BACKEND_IMAGE -t $DOCKERHUB_USERNAME/$PROJECT_NAME:$BACKEND_IMAGE ./Backend
-  #       docker build -t $FRONTEND_IMAGE -t $DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE ./Frontend
+    # [Step-3] buid and tag image from Dockerfile
+    - name: Build and tag the image
+      run: |
+        docker build -t $BACKEND_IMAGE -t $DOCKERHUB_USERNAME/$PROJECT_NAME:$BACKEND_IMAGE ./Backend
+        docker build -t $FRONTEND_IMAGE -t $DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE ./Frontend
     
-  #   # [Step-4] Push image to docker hub
-  #   - name: Push image to DockerHub
-  #     run: |
-  #       docker push $DOCKERHUB_USERNAME/$PROJECT_NAME:$BACKEND_IMAGE
-  #       docker push $DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE
+    # [Step-4] Push image to docker hub
+    - name: Push image to DockerHub
+      run: |
+        docker push $DOCKERHUB_USERNAME/$PROJECT_NAME:$BACKEND_IMAGE
+        docker push $DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE
      
-  #  [DEPLOYING] Pull image from AWS ECR and push to server with ssh
+  # [DEPLOYING] Pull image from AWS ECR and push to server with ssh
   deploy:
-    # needs: build  # condition need task building susscess
+    needs: build  # condition need task building susscess
     runs-on: ubuntu-latest
     steps:
 
     # [Step-1] check config git
     - uses: actions/checkout@v2
     
-    # [Step-2] add ssh key to now vm
+    # [Step-2] add ssh key to now vm cicd
     - name: Add SSH key to vm deploy
       run: |
         mkdir -p ~/.ssh
@@ -70,22 +70,26 @@ jobs:
         ssh-add ~/.ssh/id_rsa
         ssh-keyscan -H 'github.com' >> ~/.ssh/known_hosts 
 
-    # [Step-3] add environment need
+    # [Step-3] add environment need prod.env
     - name: Add Env needed
       run: |
         echo FRONTEND_IMAGE=$DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE >> ./Development/environment/production.env
         echo DOCKERHUB_PASSWORD=$DOCKERHUB_PASSWORD >> ./Development/environment/production.env
         echo DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME >> ./Development/environment/production.env
         echo PRODUCTION_HOST_IP_ADDRESS=$PRODUCTION_HOST_IP_ADDRESS >> ./Development/environment/production.env
-
-    # [Step-4] ssh to server and deploy
-    - name: Connect to Server with SSH
+    
+    # [Step-4] Scp send env and docker-compose to server
+    - name: Scp send env and docker-compose to server
       run: |
         scp -o StrictHostKeyChecking=no -r ./Development/environment/production.env ./Development/docker-production.yaml \
         $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS:./
+
+    # [Step-5] Ssh to server + pull image and deploy
+    - name: Ssh to server + pull image and deploy
+      run: |
         ssh -o StrictHostKeyChecking=no $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS << 'ENDSSH'
         export $(cat production.env | xargs)
-        docker login -u DOCKERHUB_USERNAME -p DOCKERHUB_PASSWORD
+        docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
         docker pull $DOCKERHUB_USERNAME/$PROJECT_NAME:$BACKEND_IMAGE
         docker pull $DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE
         docker-compose -f docker-production.yaml up -d
