@@ -72,10 +72,8 @@ jobs:
     # [Step-3] ssh to server and pull image and dowload file needed
     - name: Connect to Server with SSH and pull DockerHub image
       run: |
-        scp -i $PRODUCTION_SSH_KEY_PATH -r ./Frontend/package.json $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS:./
-        echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-        docker pull $PROJECT_NAME:$FRONTEND_IMAGE
-        docker pull $PROJECT_NAME:$BACKEND_IMAGE
+        ssh -i $PRODUCTION_SSH_KEY_PATH $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS
+        ls
 
      # [Step-4] make deploy 
     
