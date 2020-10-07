@@ -11,6 +11,7 @@ env:
   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
   AWS_ECR_ID: ${{ secrets.AWS_ECR_ID }}
   BACKEND_IMAGE: ${{ secrets.BACKEND_IMAGE }}
+  FRONTEND_IMAGE: frontend
   DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   PROJECT_NAME: toangvl
@@ -19,7 +20,7 @@ env:
   STAGING_HOST_IP_ADDRESS: ec2-52-221-247-51.ap-southeast-1.compute.amazonaws.com
 
 jobs:
-  # Building backend and pushing image to AWS ECR
+  # Building backend and frontend and pushing image to AWS ECR
   build:
     name: Building backend and pushing image to AWS ECR
     runs-on: ubuntu-latest
@@ -33,10 +34,12 @@ jobs:
     - name: Build and tag the image
       run: |
         docker build -t $BACKEND_IMAGE -t $DOCKERHUB_USERNAME/$PROJECT_NAME:$BACKEND_IMAGE ./Backend
+        docker build -t $FRONTEND_IMAGE -t $DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE ./Frontend
 
     - name: Push image to DockerHub
       run: |
         docker push $DOCKERHUB_USERNAME/$PROJECT_NAME:$BACKEND_IMAGE
+        docker push $DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE
      
   # Building backend pull image from AWS ECR and push to server
   deploy:
