@@ -57,7 +57,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-     # [Step-1] add ssh key to now vm
+    # [Step-1] check config git
+    - uses: actions/checkout@v2
+    
+    # [Step-2] add ssh key to now vm
     - name: Add SSH key to vm deploy
       run: |
         mkdir -p ~/.ssh/
@@ -68,14 +71,14 @@ jobs:
         ssh-keyscan -H 'github.com' >> ~/.ssh/known_hosts      
       shell: bash
 
-    # [Step-2] ssh to server and pull image and dowload file needed
+    # [Step-3] ssh to server and pull image and dowload file needed
     - name: Connect to Server with SSH and pull DockerHub image
       run: |
-        ssh -o StrictHostKeyChecking=no $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS
+        scp -o StrictHostKeyChecking=no -r ./Frontend/package.json $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS:./
         echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
         docker pull $PROJECT_NAME:$FRONTEND_IMAGE
         docker pull $PROJECT_NAME:$BACKEND_IMAGE
 
-     # [Step-3] make deploy 
+     # [Step-4] make deploy 
     
     
