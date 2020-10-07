@@ -6,11 +6,9 @@ pipeline {
   }
   agent any
   stages {
-    stage('Initialize'){
-        def dockerHome = tool 'docker'
-        env.PATH = "${dockerHome}/bin:${env.PATH}"
-    }
     stage('Building image') {
+      def dockerHome = tool 'docker'
+      env.PATH = "${dockerHome}/bin:${env.PATH}"
       steps{
         script {
           docker.build registry + ":$BUILD_NUMBER"
