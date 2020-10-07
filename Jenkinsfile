@@ -13,8 +13,10 @@ pipeline {
     }
     stage('Building image') {
       steps{
-        script {
-          ls
+        dir ('toangvl/Backend/') {
+          script {
+            docker.build registry + ":" + backend
+          }
         }
       }
     }
