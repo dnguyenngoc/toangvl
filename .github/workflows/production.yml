@@ -73,7 +73,7 @@ jobs:
     # [Step-3] ssh to server and push docker-compose
     - name: Connect to Server with SSH
       run: |
-        scp -o StrictHostKeyChecking=no -r ./Development/docker-compose-frontend.yaml \
+        scp -o StrictHostKeyChecking=no -r ./Development/docker-production.yaml \
         $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS:./
         ssh -o StrictHostKeyChecking=no $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS
     
@@ -91,7 +91,8 @@ jobs:
     # [Step-5] make deploy 
     - name: Make deploy
       run: |
-        docker-compose -f docker-compose-frontend.yaml up --build
+        ls
+        docker-compose -f docker-production.yaml up --build
         exit
       
     
