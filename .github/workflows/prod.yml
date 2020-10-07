@@ -6,32 +6,34 @@ on:
   pull_request:
     branches:
     - master
-jobs:
 
+env:
+  AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+  AWS_ECR_ID: ${{ secrets.AWS_ECR_ID }}
+  BACKEND_IMAGE: ${{ secrets.BACKEND_IMAGE }}
+
+jobs:
+  # Building backend and pushing image to AWS ECR
   build:
     name: Building backend and pushing image to AWS ECR
     runs-on: ubuntu-latest
     steps:
-      
+
     - name: Setup ECR
-      run: |
-        $( aws ecr get-login --no-include-email )
-    
+        run: |
+          $( aws ecr get-login --no-include-email )
+
     - name: Build and tag the image
       run: |
         docker build \
-          -t $CONTAINER_IMAGE \
-          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE ./Backend
+          -t $BACKEND_IMAGE \
+          -t $AWS_ECR_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$BACKEND_IMAGE ./Backend
 
     - name: Push image to ECR
       run: |
-        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE
-
-    env:
-      CONTAINER_IMAGE: toangvl
-      AWS_ACCOUNT_ID: '267139441507'
-      AWS_DEFAULT_REGION: ap-southeast-1
-
+        docker push $AWS_ECR_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$BACKEND_IMAGE
+     
+  # Building backend pull image from AWS ECR and push to server
   deploy:
     needs: build
     runs-on: ubuntu-latest
