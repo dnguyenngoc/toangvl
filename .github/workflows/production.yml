@@ -73,7 +73,8 @@ jobs:
     # [Step-3] ssh to server and pull image and dowload file needed
     - name: Connect to Server with SSH and pull DockerHub image
       run: |
-        ssh -o StrictHostKeyChecking=no ubuntu@ec2-52-221-247-51.ap-southeast-1.compute.amazonaws.com
+        ssh -o StrictHostKeyChecking=no $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS
+        ls
 
      # [Step-4] make deploy 
     
