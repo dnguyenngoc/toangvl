@@ -21,21 +21,17 @@ jobs:
 
     - name: Setup ECR
       run: |
-        aws ecr get-login-password \
-        | docker login \
-            --password-stdin \
-            --username AWS \
-            "${AWS_ECR_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+      aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 267139441507.dkr.ecr.ap-southeast-1.amazonaws.com
 
     - name: Build and tag the image
       run: |
         docker build \
           -t $BACKEND_IMAGE \
-          -t $AWS_ECR_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$BACKEND_IMAGE ./Backend
+          -t $AWS_ECR_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/toangvl:$BACKEND_IMAGE ./Backend
 
     - name: Push image to ECR
       run: |
-        docker push $AWS_ECR_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$BACKEND_IMAGE
+        docker push $AWS_ECR_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/toangvl:$BACKEND_IMAGE
      
   # Building backend pull image from AWS ECR and push to server
   deploy:
