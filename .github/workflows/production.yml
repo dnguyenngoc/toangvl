@@ -75,24 +75,32 @@ jobs:
       run: |
         scp -o StrictHostKeyChecking=no -r ./Development/docker-production.yaml \
         $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS:./
-        ssh -o StrictHostKeyChecking=no $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS
-    
-    # [Step-4] login dockerhub container
-    - name: Login to DockerHub Registry
-      run: |
-        echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-  
-    # [Step-5] pull image and dowload file needed
-    - name: pull image and dowload file needed
-      run: |
+        ssh -o StrictHostKeyChecking=no $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS << 'ENDSSH'
+        export $(cat .env | xargs)
+        docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
         docker pull $DOCKERHUB_USERNAME/$PROJECT_NAME:$BACKEND_IMAGE
         docker pull $DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE
-
-    # [Step-5] make deploy 
-    - name: Make deploy
-      run: |
         ls
-        docker-compose -f docker-production.yaml up --build
-        exit
+        docker-compose -f docker-production.yaml up -d
+        ENDSSH
+
+    
+    # # [Step-4] login dockerhub container
+    # - name: Login to DockerHub Registry
+    #   run: |
+    #     echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+  
+    # # [Step-5] pull image and dowload file needed
+    # - name: pull image and dowload file needed
+    #   run: |
+    #     docker pull $DOCKERHUB_USERNAME/$PROJECT_NAME:$BACKEND_IMAGE
+    #     docker pull $DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE
+
+    # # [Step-5] make deploy 
+    # - name: Make deploy
+    #   run: |
+    #     ls
+    #     docker-compose -f docker-production.yaml up --build
+    #     exit
       
     
