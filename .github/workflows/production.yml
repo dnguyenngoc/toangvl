@@ -68,38 +68,26 @@ jobs:
         chmod 700 ~/.ssh/id_rsa
         eval "$(ssh-agent -s)"
         ssh-add ~/.ssh/id_rsa
-        ssh-keyscan -H 'github.com' >> ~/.ssh/known_hosts  
+        ssh-keyscan -H 'github.com' >> ~/.ssh/known_hosts 
 
-    # [Step-3] ssh to server and push docker-compose
+    # [Step-3] add environment need
+    - name: Add Env needed
+      run: |
+        echo FRONTEND_IMAGE=$DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE >> ./Development/environment/production.env
+        echo DOCKERHUB_PASSWORD=$DOCKERHUB_PASSWORD >> ./Development/environment/production.env
+        echo DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME >> ./Development/environment/production.env
+        echo PRODUCTION_HOST_IP_ADDRESS=$PRODUCTION_HOST_IP_ADDRESS >> ./Development/environment/production.env
+
+    # [Step-4] ssh to server and deploy
     - name: Connect to Server with SSH
       run: |
-        scp -o StrictHostKeyChecking=no -r ./Development/docker-production.yaml \
+        scp -o StrictHostKeyChecking=no -r ./Development/environment/production.env ./Development/docker-production.yaml \
         $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS:./
         ssh -o StrictHostKeyChecking=no $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS << 'ENDSSH'
-        docker login -u duynguyenngoc -p 12214@Nguyen
+        export $(cat production.env | xargs)
+        docker login -u DOCKERHUB_USERNAME -p DOCKERHUB_PASSWORD
         docker pull $DOCKERHUB_USERNAME/$PROJECT_NAME:$BACKEND_IMAGE
         docker pull $DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE
-        ls
         docker-compose -f docker-production.yaml up -d
         ENDSSH
-
-    
-    # # [Step-4] login dockerhub container
-    # - name: Login to DockerHub Registry
-    #   run: |
-    #     echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-  
-    # # [Step-5] pull image and dowload file needed
-    # - name: pull image and dowload file needed
-    #   run: |
-    #     docker pull $DOCKERHUB_USERNAME/$PROJECT_NAME:$BACKEND_IMAGE
-    #     docker pull $DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE
-
-    # # [Step-5] make deploy 
-    # - name: Make deploy
-    #   run: |
-    #     ls
-    #     docker-compose -f docker-production.yaml up --build
-    #     exit
-      
     

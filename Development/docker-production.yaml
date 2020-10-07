@@ -7,7 +7,7 @@ services:
       - static_volume:/usr/src/app/staticfiles
       - media_volume:/usr/src/app/mediafiles
     restart: always
-    env_file: .env
+    env_file: production.env
     ports:
       - '80:80'
     networks:
@@ -15,4 +15,9 @@ services:
 
 networks:
   toangvlnet:
+
+volumes:
+  static_volume:
+  media_volume:
+
 
