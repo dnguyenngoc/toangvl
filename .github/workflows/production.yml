@@ -54,7 +54,7 @@ jobs:
      
   #  [DEPLOYING] Pull image from AWS ECR and push to server with ssh
   deploy:
-    needs: build  # condition need task building susscess
+    # needs: build  # condition need task building susscess
     runs-on: ubuntu-latest
     steps:
 
