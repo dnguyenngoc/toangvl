@@ -7,7 +7,7 @@ const controller = require('../controllers/accounts.js')
 router = express.Router();
 
 // Login access token
-router.get('/login',controller.login)
+router.get('/login', controller.login)
 
 // // Login renew token
 // router.get('/renew-token',controller.renewToken)

@@ -4,7 +4,7 @@ services:
 
   # Backend / API
   backend:
-    image: api
+    container_name: backend
     build: ../Backend
     volumes:
       - ../backend/toangvl/:/user/src/app/
@@ -12,7 +12,7 @@ services:
     env_file:
       - ./environment/development.env
     ports:
-      - '4201:80'
+      - '80:80'
     depends_on:
       - database
     networks:
@@ -20,18 +20,32 @@ services:
   
   # Database mysql
   database:
-    image: mongo:latest
+    image: mysql:5.7
     container_name: database
     volumes:
       - ./db_data:/var/lib/mysql
     restart: always
     ports:
-      - '27017:27017'
+      - '32000:3306'
     env_file:
       - ./environment/development.env
     networks:
       - toangvlnet
-  
+
+  # PHP admin just for dev
+  phpmyadmin:
+    container_name: phpmyadmin
+    depends_on: 
+      - database
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      - ./environment/development.env
+    networks:
+      - toangvlnet
+
 networks:
   toangvlnet:
 
