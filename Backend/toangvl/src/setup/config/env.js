@@ -10,9 +10,6 @@ exports.NODE_ENV = process.env.NODE_ENV
 // Port
 exports.BACKEND_PORT = process.env.BACKEND_PORT
 
-// Mysql
-// exports.MYSQL_URL = process.env.MYSQL_URL
-
 // MongoDB
 exports.MONGO_URL = process.env.MONGO_URL
 
