@@ -20,8 +20,8 @@ jobs:
     steps:
 
     - name: Setup ECR
-        run: |
-          $( aws ecr get-login --no-include-email )
+      run: |
+        $( aws ecr get-login --no-include-email )
 
     - name: Build and tag the image
       run: |
