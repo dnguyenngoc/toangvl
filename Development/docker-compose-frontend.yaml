@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: frontend
+    build: ../Frontend
+    volumes:
+      - ../Frontend/toangvl/:/user/src/app/
+    restart: always
+    env_file:
+      - ./environment/development.env
+    ports:
+      - '80:80'
+    networks:
+      - toangvlnet
+
+networks:
+  toangvlnet:
+

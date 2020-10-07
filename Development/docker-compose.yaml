@@ -21,7 +21,6 @@ services:
   # Database mysql
   database:
     image: mysql:5.7
-    container_name: database
     volumes:
       - ./db_data:/var/lib/mysql
     restart: always
