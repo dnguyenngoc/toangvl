@@ -63,15 +63,17 @@ jobs:
     # [Step-2] add ssh key to now vm
     - name: Add SSH key to vm deploy
       run: |
-        mkdir -p ~/.ssh/
-        ssh-add - <<< $PRODUCTION_PRIVATE_KEY
+        mkdir -p ~/.ssh
+        echo "$PRODUCTION_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+        chmod 700 ~/.ssh/id_rsa
+        eval "$(ssh-agent -s)"
+        ssh-add ~/.ssh/id_rsa
         ssh-keyscan -H 'github.com' >> ~/.ssh/known_hosts  
 
     # [Step-3] ssh to server and pull image and dowload file needed
     - name: Connect to Server with SSH and pull DockerHub image
       run: |
         ssh ubuntu@ec2-52-221-247-51.ap-southeast-1.compute.amazonaws.com
-        ls
 
      # [Step-4] make deploy 
     
