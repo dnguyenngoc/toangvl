@@ -21,7 +21,7 @@ jobs:
 
     - name: Setup ECR
       run: |
-        aws --region ${AWS_DEFAULT_REGION} ecr get-login-password \
+        aws ecr get-login-password \
         | docker login \
             --password-stdin \
             --username AWS \
