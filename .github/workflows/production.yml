@@ -70,12 +70,25 @@ jobs:
         ssh-add ~/.ssh/id_rsa
         ssh-keyscan -H 'github.com' >> ~/.ssh/known_hosts  
 
-    # [Step-3] ssh to server and pull image and dowload file needed
-    - name: Connect to Server with SSH and pull DockerHub image
+    # [Step-3] ssh to server and push docker-compose
+    - name: Connect to Server with SSH
       run: |
+        scp  -o StrictHostKeyChecking=no -r ./Development/docker-compose-frontend.yaml \
+        $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS:./
         ssh -o StrictHostKeyChecking=no $PRODUCTION_HOST_SSH_USERNAME@$PRODUCTION_HOST_IP_ADDRESS
+    
+    # [Step-4] login dockerhub container
+    - name: Login to DockerHub Registry
+      run: |
+        echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+  
+    # [Step-5] pull image and dowload file needed
+    - name: pull image and dowload file needed
+      run: |
+        docker pull $DOCKERHUB_USERNAME/$PROJECT_NAME:$BACKEND_IMAGE
+        docker pull $DOCKERHUB_USERNAME/$PROJECT_NAME:$FRONTEND_IMAGE
         ls
 
-     # [Step-4] make deploy 
+    # [Step-5] make deploy 
     
     
